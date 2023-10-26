@@ -2,7 +2,7 @@
 import Sequelize from 'sequelize';
 import { sequelize } from '../config/database.js';
 
-const user = sequelize.define('user',{
+export const user = sequelize.define('user',{
     user_name:{
         type:Sequelize.STRING,
         allowNull: false,
@@ -17,7 +17,22 @@ const user = sequelize.define('user',{
         type:Sequelize.STRING,
         allowNull:false,
         unique:true
-    }
-})
+    },
+    role: {
+        type: DataTypes.ENUM(ROLES.ADMIN, ROLES.USER),
+        defaultValue: ROLES.ADMIN
+      }
+    }, {
+      timestamps: true
+    })
+    
+// servicio
 
-export default user;
+// export async function getAllUsers (){
+//     return await user.findAll() ?? null
+// };
+
+export async function getUserById (user) {
+    const hashedPassword = await hasgString(user.password)
+};
+

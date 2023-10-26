@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import router from './src/routes/user_routes.js'
 import { db_conecction } from './src/config/database.js';
 
+
 const app = express();
 dotenv.config();
 
