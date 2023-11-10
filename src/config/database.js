@@ -5,12 +5,12 @@ import { enviroments } from './environments.js'
 
 
 export const sequelize = new Sequelize(
-  enviroments.DB_NAME,
-  enviroments.DB_USER,
-  enviroments.DB_PASSWORD,
+  enviroments.BD.DB_NAME,
+  enviroments.BD.DB_USER,
+  enviroments.BD.DB_PASSWORD,
   {
-    host: enviroments.DB_HOST,
-    dialect: enviroments.DB_DIALECT,
+    host: enviroments.BD.DB_HOST,
+    dialect: enviroments.BD.DB_DIALECT,
   }
 );
 export const db_conecction = () => {

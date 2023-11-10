@@ -9,4 +9,4 @@ export const validator = (req, res, next) => {
     }
 
     next()
-};
+}

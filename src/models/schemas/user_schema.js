@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
 
 export const createUserSchema = [
-    body('username')
+    body('user_name')
         .exists()
         .notEmpty().withMessage('El username no debe estar vacío')
         .isString().withMessage('El username debe ser un string'),
@@ -16,7 +16,7 @@ export const createUserSchema = [
 ]
 
 export const loginUserSchema = [
-    Body('email')
+    body('email')
         .exists()
         .notEmpty()
         .isEmail(),

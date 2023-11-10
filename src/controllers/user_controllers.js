@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
-import user from '../models/user_model.js';
+import {user} from '../models/user_model.js';
+import jwt from 'jsonwebtoken';
+import { createJWT } from '../helpers/jsonwebtoken.js';
 
 
 //controlador para el registro de usuarios
@@ -15,11 +17,9 @@ export const register_user = async (req, res) => {
         if (existing_user) {
             return res.status(400).json({ error: 'El usuario ya existe' });
         }
-        // const existing_username = await user.findOne({ where: { user_name } });
 
-        // if (existing_username) {
-        //     return res.status(400).json({ error: 'El usuario ya existe' });
-        // }
+
+        const token = await createJWT({ user: user.id })
 
         //hashear la contraseña antes de almacenarla en la base de datos
 
@@ -27,9 +27,10 @@ export const register_user = async (req, res) => {
 
         //crear un nuevo usuario
 
-        const new_user = await user.create({ user_name, email, password: hashear_password });
+        const new_user = await user.create({ user_name, email, password: hashear_password});
 
-        res.status(201).json(new_user);
+        // res.status(200).json(token)
+        res.status(201).json({new_user, token});
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: ' Error en el registro de usuario' });
@@ -72,3 +73,21 @@ export const user_login = async (req, res) => {
     }
 };
 
+export const ctrlGetUserInfoByToken = async (req, res)=>{
+    const token = req.headers.authorization
+
+
+    if(!token){
+        return res.sendStatus(404)
+    }
+
+    const { user:userId } = jwt.verify(token, enviroments.SECRET)
+
+    const user = await getUserById(userId)
+
+    if(!user) {
+        return res.sendStatus(404)
+    }
+
+    res.status(200).json(user)
+}

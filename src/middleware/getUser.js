@@ -1,8 +1,8 @@
 import { environments } from '../config/environments.js';
-import { getYserById } from '../models/user_model.js';
+//import { getYserById } from '../models/user_model.js';
 import jwt from 'jsonwebtoken';
 
-export const getUser = asyn (req, res, next) => {
+export const getUser = async (req, res, next) => {
     const token = req.headers.authorization
 
     if(!token) {
@@ -18,6 +18,6 @@ export const getUser = asyn (req, res, next) => {
     }
 
     req.user = user
-    next();
+    next()
 
 }
