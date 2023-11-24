@@ -11,4 +11,10 @@ router.post('/registro', register_user);
 
 router.post('/inicioSesion', user_login);
 
+// rutas de socket.io
+
+router.get('/socket.io', (req, res) => {
+    console.log('conectado');
+})
+
 export default router;

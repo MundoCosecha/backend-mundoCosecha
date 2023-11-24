@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import user from '../models/user_model.js';
+import {user} from '../models/user_model.js';
 
 
 //controlador para el registro de usuarios

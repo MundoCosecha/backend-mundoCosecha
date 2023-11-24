@@ -6,9 +6,14 @@ import dotenv from 'dotenv';
 import router from './src/routes/user_routes.js'
 import { db_conecction } from './src/config/database.js';
 
-
 const app = express();
 dotenv.config();
+
+import http from 'http';
+const httpServer = http.createServer(app);
+import { Server } from 'socket.io';
+const io = new Server(httpServer);
+
 
 //middleware
 app.use(cors());
@@ -20,13 +25,22 @@ app.use(morgan('dev'));
 
 app.use('/auth',router);
 
-
+// Escuchar conexiones entrantes
+io.on('connection', (socket) => {
+    console.log('Un usuario se ha conectado');
+  
+    
+  
+    socket.on('disconnect', () => {
+      console.log('Un usuario se ha desconectado');
+    });
+  });
 
 
 //connect to database
 db_conecction();
 
-const port = process.env.PORT || 5000
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-})
+const PORT = process.env.PORT || 5000;
+httpServer.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
