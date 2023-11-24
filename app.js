@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors({
     origin:'*',
     methods:['GET', 'POST']
-}));
+}));    
 app.use(helmet());
 app.use(morgan('dev'));
 
