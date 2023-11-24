@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import {user} from '../models/user_model.js';
 import jwt from 'jsonwebtoken';
 import { createJWT } from '../helpers/jsonwebtoken.js';
+import router from '../routes/user.routes.js';
 
 
 //controlador para el registro de usuarios
@@ -19,7 +20,7 @@ export const register_user = async (req, res) => {
         }
 
 
-        const token = await createJWT({ user: user.id })
+        const {token} = await createJWT({ user: user.id })
 
         //hashear la contraseña antes de almacenarla en la base de datos
 
@@ -58,14 +59,17 @@ export const user_login = async (req, res) => {
             return res.status(500).json({ error: 'el usuario no tiene una contaseña valida' })
         }
         //comprobar la contraseña
-        console.log({ password })
-        console.log(user_name.password)
+
+
         const passwordMatch = await bcrypt.compare(password, user_name.password);
-        if (passwordMatch) {
-            return res.json({ message: 'Inicio de sesion exitoso' });
-        } else {
-            return res.status(401).json({ error: 'La contraseña es incorrecta' });
-        }
+        if (!passwordMatch) return res.status(401).json({ error: 'La contraseña es incorrecta' });
+
+
+        const token = await createJWT({user: user.id})
+
+        return res.json(token)
+
+        
     } catch (error) {
         console.error(error);
         //registrar el error para depuracion

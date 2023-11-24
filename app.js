@@ -3,6 +3,8 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import { Server as SocketServer } from 'socket.io';
+import { createServer} from "http";
 
 dotenv.config();
 
@@ -14,6 +16,8 @@ import './src/models/user_model.js'
 
 const app = express();
 
+const httpServer = createServer(app);
+const io = new SocketServer(httpServer);
 
 //middleware
 app.use(express.json());
@@ -35,6 +39,6 @@ app.use('/api/users', userRoutes);
 db_conecction();
 
 const port = process.env.PORT || 5000
-app.listen(port, () => {
+httpServer.listen(port, () => {
     console.log(`Server running on http://localhost:${enviroments.PORT}`);
 })
