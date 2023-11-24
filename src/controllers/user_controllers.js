@@ -61,13 +61,12 @@ export const user_login = async (req, res) => {
 
         const passwordMatch = await bcrypt.compare(password, user_name.password);
 
-        const { token } = await createJWT({ user: user.id })
+        if (!passwordMatch) return res.status(401).json({ error: 'La contraseña es incorrecta' });
 
-        if (passwordMatch) {
-            return res.json(token);
-        } else {
-            return res.status(401).json({ error: 'La contraseña es incorrecta' });
-        }
+        const token = await createJWT({ user: user.id })
+
+        return res.json(token);
+
 
     } catch (error) {
         console.error(error);
