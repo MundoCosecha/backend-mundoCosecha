@@ -3,63 +3,63 @@ import { sequelize } from '../config/database.js';
 import { DataTypes } from 'sequelize';
 
 export const ROLES = {
-    ADMIN:'admin',
-    USER:'user'
+    ADMIN: 'admin',
+    USER: 'user'
 }
 
-export const user = sequelize.define('user',{
-    user_name:{
-        type:Sequelize.STRING,
+export const user = sequelize.define('user', {
+    user_name: {
+        type: Sequelize.STRING,
         allowNull: false,
-        unique:true
+        unique: true
     },
     email: {
-        type:Sequelize.STRING,
-        allowNull:false,
-        
+        type: Sequelize.STRING,
+        allowNull: false,
+
     },
     password: {
-        type:Sequelize.STRING,
-        allowNull:false,
-        
-    },
-    role: {
-        type: DataTypes.ENUM(ROLES.ADMIN, ROLES.USER),
-        defaultValue: ROLES.USER
-      }
-    }, {
-      timestamps: true
-    })
+        type: Sequelize.STRING,
+        allowNull: false,
 
-    
+    },
+    // role: {
+    //     type: DataTypes.ENUM(ROLES.ADMIN, ROLES.USER),
+    //     defaultValue: ROLES.USER
+    //   }
+}, {
+    timestamps: true
+})
+
+
 // servicio
 
-export async function getAllUsers (){
+export async function getAllUsers() {
     return await user.findAll() ?? null
 };
 
 
-export async function createUser (user) {
+export async function createUser(user) {
     const hashedPassword = await hashString(user.password)
-  
-    return await userModel.create({...user, password: hashedPassword})
+
+    return await userModel.create({ ...user, password: hashedPassword })
 
 }
 
-export async function getUserById (userId) {
+export async function getUserById(userId) {
     return await userModel.findByPk(userId) ?? null
 }
 
-export async function getUserByEmailAndPassword ({ email, password}) {
-    const user = await userModel.findOne({ where:{email}})
+export async function getUserByEmailAndPassword({ email, password }) {
+    const user = await userModel.findOne({ where: { email } })
 
-    if(!user){
+    if (!user) {
         return null
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
 
-    if(!isPasswordValid){
+    if (!isPasswordValid) {
         return null
     }
 

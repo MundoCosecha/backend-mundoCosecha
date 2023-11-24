@@ -18,16 +18,15 @@ const app = express();
 //middleware
 app.use(express.json());
 app.use(cors({
-    origin:'*',
-    methods:['GET', 'POST']
+    origin: '*',
+    methods: ['GET', 'POST']
 }));
 app.use(helmet());
 app.use(morgan('dev'));
 
 //rutas de autenticación
 
-app.use('/auth',userRoutes);
-app.use('/api/users', userRoutes);
+app.use('/auth', userRoutes);
 
 
 

@@ -7,11 +7,11 @@ export const ctrlLoginUser = async (req, res) => {
     try {
 
         const user = await getUserByEmailAndPassword(req.body)
-        
+
         const token = await createJWT({ user: user.id })
-        
+
         res.status(200).json(token)
-    }catch(error) {
+    } catch (error) {
         console.log(error)
         res.sendStatus(500)
     }
@@ -22,28 +22,54 @@ export const ctrlRegisterUser = async (req, res) => {
         const user = await createUser(req.body)
 
         const token = await createJWT({ user: user.id })
-    
+
         res.status(200).json(token)
-    }catch(error){
+    } catch (error) {
         res.sendStatus(500)
     }
 }
 
-export const ctrlGetUserInfoByToken = async (req, res)=>{
+export const ctrlGetUserInfoByToken = async (req, res) => {
     const token = req.headers.authorization
 
 
-    if(!token){
+    if (!token) {
         return res.sendStatus(404)
     }
 
-    const { user:userId } = jwt.verify(token, enviroments.SECRET)
+    const { user: userId } = jwt.verify(token, enviroments.SECRET)
 
     const user = await getUserById(userId)
 
-    if(!user) {
+    if (!user) {
         return res.sendStatus(404)
     }
 
     res.status(200).json(user)
+}
+
+
+export const refreshToken = async (req, res) => {
+    try {
+        const token = req.headers.authorization
+
+        if (!token) {
+            return res.sendStatus(404)
+        }
+
+        const { user: userId } = jwt.verify(token, enviroments.SECRET)
+
+        const user = await getUserById(userId)
+
+        if (!user) {
+            return res.sendStatus(404)
+        }
+
+        const newToken = await createJWT({ user: user.id })
+
+        res.status(200).json(newToken)
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
 }

@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import {user} from '../models/user_model.js';
+import { user } from '../models/user_model.js';
 import jwt from 'jsonwebtoken';
 import { createJWT } from '../helpers/jsonwebtoken.js';
 
@@ -19,7 +19,7 @@ export const register_user = async (req, res) => {
         }
 
 
-        const token = await createJWT({ user: user.id })
+        const { token } = await createJWT({ user: user.id })
 
         //hashear la contraseña antes de almacenarla en la base de datos
 
@@ -27,10 +27,10 @@ export const register_user = async (req, res) => {
 
         //crear un nuevo usuario
 
-        const new_user = await user.create({ user_name, email, password: hashear_password});
+        const new_user = await user.create({ user_name, email, password: hashear_password });
 
         // res.status(200).json(token)
-        res.status(201).json({new_user, token});
+        res.status(201).json({ new_user, token });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: ' Error en el registro de usuario' });
@@ -57,15 +57,18 @@ export const user_login = async (req, res) => {
         if (!user_name.password) {
             return res.status(500).json({ error: 'el usuario no tiene una contaseña valida' })
         }
-        //comprobar la contraseña
-        console.log({ password })
-        console.log(user_name.password)
+
+
         const passwordMatch = await bcrypt.compare(password, user_name.password);
+
+        const { token } = await createJWT({ user: user.id })
+
         if (passwordMatch) {
-            return res.json({ message: 'Inicio de sesion exitoso' });
+            return res.json(token);
         } else {
             return res.status(401).json({ error: 'La contraseña es incorrecta' });
         }
+
     } catch (error) {
         console.error(error);
         //registrar el error para depuracion
@@ -73,19 +76,19 @@ export const user_login = async (req, res) => {
     }
 };
 
-export const ctrlGetUserInfoByToken = async (req, res)=>{
+export const ctrlGetUserInfoByToken = async (req, res) => {
     const token = req.headers.authorization
 
 
-    if(!token){
+    if (!token) {
         return res.sendStatus(404)
     }
 
-    const { user:userId } = jwt.verify(token, enviroments.SECRET)
+    const { user: userId } = jwt.verify(token, enviroments.SECRET)
 
     const user = await getUserById(userId)
 
-    if(!user) {
+    if (!user) {
         return res.sendStatus(404)
     }
 
