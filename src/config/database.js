@@ -1,13 +1,14 @@
-import { Sequelize } from "sequelize";
-// import dotenv from "dotenv";
-// dotenv.config();
-import { enviroments } from './environments.js'
+import  Sequelize, { Model }  from "sequelize";
+ import dotenv from "dotenv";
+import   {enviroments } from './environments.js';
 
+dotenv.config();
 
-export const sequelize = new Sequelize(
+ const sequelize = new Sequelize(
   enviroments.BD.DB_NAME,
   enviroments.BD.DB_USER,
   enviroments.BD.DB_PASSWORD,
+  enviroments.BD.SECRET,
   {
     host: enviroments.BD.DB_HOST,
     dialect: enviroments.BD.DB_DIALECT,
@@ -21,3 +22,5 @@ export const db_conecction = () => {
     console.log(error);
   }
 };
+
+module.exports = sequelize;
