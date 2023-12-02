@@ -1,10 +1,10 @@
-import  Sequelize, { Model }  from "sequelize";
+import  Sequelize from "sequelize";
  import dotenv from "dotenv";
 import   {enviroments } from './environments.js';
 
 dotenv.config();
 
- const sequelize = new Sequelize(
+  export const sequelize = new Sequelize(
   enviroments.BD.DB_NAME,
   enviroments.BD.DB_USER,
   enviroments.BD.DB_PASSWORD,
@@ -23,4 +23,3 @@ export const db_conecction = () => {
   }
 };
 
-module.exports = sequelize;
