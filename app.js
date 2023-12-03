@@ -31,7 +31,7 @@ app.use(morgan('dev'));
 //rutas de autenticación
 
 app.use('/auth',userRoutes);
-app.use('/api/users', userRoutes);
+
 
 
 

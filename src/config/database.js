@@ -8,7 +8,7 @@ dotenv.config();
   enviroments.BD.DB_NAME,
   enviroments.BD.DB_USER,
   enviroments.BD.DB_PASSWORD,
-  enviroments.BD.SECRET,
+
   {
     host: enviroments.BD.DB_HOST,
     dialect: enviroments.BD.DB_DIALECT,
