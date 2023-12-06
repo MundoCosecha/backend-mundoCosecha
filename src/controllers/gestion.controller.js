@@ -4,7 +4,21 @@ import { Huerta, Tareas } from "../models/gestion.js";
 export const getHuertas = async (req, res) => {
   try {
     const huertas = await Huerta.findAll();
-    res.json(huertas);
+    res.status(200).json(huertas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const getHuertaById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const huerta = await Huerta.findByPk(id);
+    if (huerta) {
+      res.status(200).json(huerta);
+    } else {
+      res.status(404).json({ mensaje: "Huerta no encontrada" });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -12,9 +26,9 @@ export const getHuertas = async (req, res) => {
 
 // Crear una nueva huerta
 export const createHuerta = async (req, res) => {
-  const { nombre } = req.body;
+  const { nombre, userId } = req.body;
   try {
-    const nuevaHuerta = await Huerta.create({ nombre });
+    const nuevaHuerta = await Huerta.create({ nombre, userId });
     res.status(201).json(nuevaHuerta);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -65,11 +79,25 @@ export const getTareas = async (req, res) => {
   }
 };
 
+export const getTareaById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tarea = await Tareas.findAll({ where: { huertaId: id } });
+    if (tarea) {
+      res.json(tarea);
+    } else {
+      res.status(404).json({ mensaje: "Tarea no encontrada" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 // Crear una nueva tarea
 export const createTarea = async (req, res) => {
-  const { nombre, descripcion, estado } = req.body;
+  const { nombre, descripcion, huertaId } = req.body;
   try {
-    const nuevaTarea = await Tareas.create({ nombre, descripcion, estado });
+    const nuevaTarea = await Tareas.create({ nombre, descripcion, huertaId });
     res.status(201).json(nuevaTarea);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -79,13 +107,12 @@ export const createTarea = async (req, res) => {
 // Actualizar una tarea
 export const updateTarea = async (req, res) => {
   const { id } = req.params;
-  const { nombre, descripcion, estado } = req.body;
+  const { nombre, descripcion } = req.body;
   try {
     const tarea = await Tareas.findByPk(id);
     if (tarea) {
       tarea.nombre = nombre;
       tarea.descripcion = descripcion;
-      tarea.estado = estado;
       await tarea.save();
       res.json(tarea);
     } else {

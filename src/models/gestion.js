@@ -16,9 +16,5 @@ export const Tareas = sequelize.define("tareas", {
   descripcion: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  estado: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  },
+  }
 });

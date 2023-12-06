@@ -73,7 +73,7 @@ export const user_login = async (req, res) => {
 
     const token = await createJWT({ user: user.id });
 
-    return res.json(token);
+    return res.json({ token, user_name });
   } catch (error) {
     console.error(error);
     //registrar el error para depuracion
