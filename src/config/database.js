@@ -1,23 +1,26 @@
-import { Sequelize } from "sequelize";
-// import dotenv from "dotenv";
-// dotenv.config();
-import { enviroments } from './environments.js'
+import Sequelize from "sequelize";
+
+import { environment } from './environments.js';
+
 
 
 export const sequelize = new Sequelize(
-  enviroments.BD.DB_NAME,
-  enviroments.BD.DB_USER,
-  enviroments.BD.DB_PASSWORD,
+  environment.DB.DB_NAME,
+  environment.DB.DB_USER,
+  environment.DB.DB_PASSWORD,
   {
-    host: enviroments.BD.DB_HOST,
-    dialect: enviroments.BD.DB_DIALECT,
+    host: environment.DB.DB_HOST,
+    dialect: environment.DB.DB_DIALECT,
+    port: environment.DB.DB_PORT,
   }
 );
+
 export const db_conecction = () => {
   try {
-    sequelize.sync({ force: false });
+    sequelize.sync({ force: true });
     console.log("Data base connected");
   } catch (error) {
     console.log(error);
   }
 };
+

@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-import { enviroments } from "./src/config/environments.js";
+import { environment } from "./src/config/environments.js";
 import { db_conecction } from "./src/config/database.js";
 import userRoutes from "./src/routes/user.routes.js";
 import plantaRoutes from "./src/routes/plantas.routes.js";
@@ -36,5 +36,5 @@ app.use("/api", gestionRoutes);
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     db_conecction();
-    console.log(`Server running on http://localhost:${enviroments.PORT}`);
+    console.log(`Server running on http://localhost:${environment.PORT}`);
 });
